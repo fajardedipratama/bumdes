@@ -9,6 +9,34 @@ use app\models\Ponten;
 use app\models\LainMasuk;
 use app\models\MobilServis;
 use app\models\LainKeluar;
+
+function bulan($data){
+    if($data == 1){
+        return 'Januari';
+    }elseif($data == 2){
+        return 'Februari';
+    }elseif($data == 3){
+        return 'Maret';
+    }elseif($data == 4){
+        return 'April';
+    }elseif($data == 5){
+        return 'Mei';
+    }elseif($data == 6){
+        return 'Juni';
+    }elseif($data == 7){
+        return 'Juli';
+    }elseif($data == 8){
+        return 'Agustus';
+    }elseif($data == 9){
+        return 'September';
+    }elseif($data == 10){
+        return 'Oktober';
+    }elseif($data == 11){
+        return 'November';
+    }elseif($data == 12){
+        return 'Desember';
+    }
+}
 // pemasukan
 $kios = SetoranKios::find()->where(['between','tgl_setoran',$model->tgl_awal,$model->tgl_akhir])->all();
 $setorkios = SetoranKiosDetail::find()->where(['between','tgl_setoran',$model->tgl_awal,$model->tgl_akhir])->sum('biaya');
@@ -20,8 +48,8 @@ $lainmasuk=LainMasuk::find()->where(['between','tgl_setor',$model->tgl_awal,$mod
 $servis = MobilServis::find()->where(['between','tgl_servis',$model->tgl_awal,$model->tgl_akhir]);
 $lainkeluar=LainKeluar::find()->where(['between','tgl_setor',$model->tgl_awal,$model->tgl_akhir]);
 // total
-$dana_lalu = Laporan::find()->where(['bulan'=>$model->bulan-1,'tahun'=>$model->tahun])->one();
-if($dana_lalu){
+if($model->dana_kemarin === 'Ya'){
+    $dana_lalu = Laporan::find()->where(['bulan'=>$model->bulan-1,'tahun'=>$model->tahun])->one();
     $pemasukan = $dana_lalu->dana+$setorkios+$mobil->sum('biaya')+$bgmart->sum('jumlah')+$ponten->sum('jumlah')+$lainmasuk->sum('jumlah');
 }else{
     $pemasukan = $setorkios+$mobil->sum('biaya')+$bgmart->sum('jumlah')+$ponten->sum('jumlah')+$lainmasuk->sum('jumlah');
@@ -54,7 +82,7 @@ $selisih = $pemasukan-$pengeluaran;
 <button style="font-size:18px" class="tombol" onclick="window.print()">Print Laporan</button>
 <h3 style="text-align:center">
 	LAPORAN KEUANGAN BUMDES BINTANG GIRI <br>
-	MARET 2022
+	<?= bulan($model->bulan).' '.$model->tahun ?>
 </h3>
 <table border="1" cellspacing="0" cellpadding="5" width="100%">
     <tr>
@@ -62,15 +90,13 @@ $selisih = $pemasukan-$pengeluaran;
         <th>Uang Masuk</th>
         <th>Uang Keluar</th>
     </tr>
+<?php if($model->dana_kemarin === 'Ya'): ?>
     <tr>
         <td width="50%">Setoran Bulan Sebelumnya</td>
-        <td width="25%"><?php
-        if($dana_lalu){
-            echo Yii::$app->formatter->asCurrency($dana_lalu['dana']);
-        }
-        ?></td>
+        <td width="25%"><?= Yii::$app->formatter->asCurrency($dana_lalu['dana']);?></td>
         <td></td>
     </tr>
+<?php endif ?>
     <tr>
         <td width="50%">Setoran Kios Pasar</td>
         <td width="25%"><?= Yii::$app->formatter->asCurrency($setorkios) ?></td>

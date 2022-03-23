@@ -27,6 +27,7 @@ $this->title = 'Data Kios';
 </div>
 
 <div class="box"><div class="box-body"><div class="table-responsive">
+    <label>*Data ini diurutkan dari tanggal selesai sewa terdekat</label>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,

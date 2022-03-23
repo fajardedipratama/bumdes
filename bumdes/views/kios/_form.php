@@ -50,27 +50,11 @@ use dosamigos\datepicker\DatePicker;
             ]
         ])?>
     </div>
-<?php if(!$model->isNewRecord): ?>
-    <div class="col-sm-4">
-    <?php 
-        if(!$model->isNewRecord || $model->isNewRecord){
-            if($model->akhir_sewa!=null){
-                $model->akhir_sewa=date('d-m-Y',strtotime($model->akhir_sewa));
-            }
-        }
-    ?>
-        <?= $form->field($model, 'akhir_sewa')->widget(DatePicker::className(),[
-            'clientOptions'=>[
-                'autoclose'=>true,
-                'format'=>'dd-mm-yyyy',
-                'orientation'=>'bottom',
-            ]
-        ])?>
-    </div>
-<?php endif ?>
+<?php if($model->isNewRecord): ?>
     <div class="col-sm-4">
         <?= $form->field($model, 'biaya_sewa')->textInput(['type'=>'number','maxlength' => true]) ?>
     </div>
+<?php endif ?>
 </div>
 </div></div>
 

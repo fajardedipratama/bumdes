@@ -13,6 +13,7 @@ use Yii;
  * @property string|null $tgl_awal
  * @property string|null $tgl_akhir
  * @property int $dana
+ * @property String $dana_kemarin
  */
 class Laporan extends \yii\db\ActiveRecord
 {
@@ -33,6 +34,7 @@ class Laporan extends \yii\db\ActiveRecord
             [['bulan', 'tahun','tgl_awal','tgl_akhir'], 'required'],
             [['bulan','dana'], 'integer'],
             [['tahun'], 'string', 'max' => 4],
+            [['dana_kemarin'], 'string', 'max' => 100],
             [['tgl_awal','tgl_akhir'],'safe'],
         ];
     }
@@ -49,6 +51,7 @@ class Laporan extends \yii\db\ActiveRecord
             'tgl_awal' => 'Tanggal Awal',
             'tgl_akhir' => 'Tanggal Akhir',
             'dana' => 'Saldo Bulan Lalu',
+            'dana_kemarin' => 'Tambahkan Dana Bulan Lalu ?',
         ];
     }
 }

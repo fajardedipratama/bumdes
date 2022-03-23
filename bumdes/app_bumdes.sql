@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 21 Mar 2022 pada 13.50
+-- Waktu pembuatan: 23 Mar 2022 pada 15.41
 -- Versi server: 10.4.17-MariaDB
 -- Versi PHP: 8.0.2
 
@@ -68,7 +68,30 @@ INSERT INTO `id_kios` (`id`, `no_kios`, `nama`, `no_ktp`, `no_hp`, `alamat`, `je
 (1, 4, 'Fajar Dedi Pratama', '31525020205000001', '083173388708', 'Sambiroto Balongpangggang', 'Makanan', '2022-03-04', '2022-02-01', NULL),
 (3, 2, 'Pratama', '123456789000', '0812345678', 'Giri', 'Pakaian', '2022-03-06', '2023-03-06', 5000000),
 (5, 1, 'Aca', '352409910293900', '087888999000', 'Giri', 'Makanan', '2021-07-06', '2022-01-02', 6000000),
-(6, 1, 'Fajar Dedi Pratama', '31525020205000001', '083173388708', 'Sambiroto Balongpangggang', 'Makanan', '2022-03-01', '2023-03-01', 4000000);
+(6, 1, 'Fajar Dedi Pratama', '31525020205000001', '083173388708', 'Sambiroto Balongpangggang', 'Makanan', '2022-03-01', '2023-03-01', 4000000),
+(7, 3, 'Dimas', '3502020202020200', '0812345678', 'Wedani Cerme', 'Pakaian', '2022-03-02', '2024-03-01', 3500000);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `id_kios_kontrak`
+--
+
+CREATE TABLE `id_kios_kontrak` (
+  `id` int(11) NOT NULL,
+  `kios_id` int(11) NOT NULL,
+  `awal_kontrak` date DEFAULT NULL,
+  `akhir_kontrak` date DEFAULT NULL,
+  `tagihan` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `id_kios_kontrak`
+--
+
+INSERT INTO `id_kios_kontrak` (`id`, `kios_id`, `awal_kontrak`, `akhir_kontrak`, `tagihan`) VALUES
+(1, 7, '2022-03-02', '2023-03-02', 3000000),
+(2, 7, '2023-03-02', '2024-03-01', 3500000);
 
 -- --------------------------------------------------------
 
@@ -108,7 +131,7 @@ CREATE TABLE `id_lain_masuk` (
 --
 
 INSERT INTO `id_lain_masuk` (`id`, `tgl_setor`, `nama_setoran`, `jumlah`) VALUES
-(1, '2022-03-12', 'Setoran kios mayora maret', 150000);
+(1, '2022-03-12', 'sumbangan', 150000);
 
 -- --------------------------------------------------------
 
@@ -122,16 +145,17 @@ CREATE TABLE `id_laporan` (
   `tahun` varchar(10) NOT NULL,
   `tgl_awal` date DEFAULT NULL,
   `tgl_akhir` date DEFAULT NULL,
-  `dana` int(11) DEFAULT NULL
+  `dana` int(11) DEFAULT NULL,
+  `dana_kemarin` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `id_laporan`
 --
 
-INSERT INTO `id_laporan` (`id`, `bulan`, `tahun`, `tgl_awal`, `tgl_akhir`, `dana`) VALUES
-(5, 3, '2022', '2022-03-01', '2022-03-31', 6330000),
-(6, 4, '2022', '2022-04-01', '2022-04-29', 6830000);
+INSERT INTO `id_laporan` (`id`, `bulan`, `tahun`, `tgl_awal`, `tgl_akhir`, `dana`, `dana_kemarin`) VALUES
+(5, 3, '2022', '2022-03-01', '2022-03-31', 6330000, 'Tidak'),
+(6, 4, '2022', '2022-04-01', '2022-04-29', 6830000, 'Ya');
 
 -- --------------------------------------------------------
 
@@ -311,6 +335,12 @@ ALTER TABLE `id_kios`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `id_kios_kontrak`
+--
+ALTER TABLE `id_kios_kontrak`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `id_lain_keluar`
 --
 ALTER TABLE `id_lain_keluar`
@@ -385,7 +415,13 @@ ALTER TABLE `id_bgmart`
 -- AUTO_INCREMENT untuk tabel `id_kios`
 --
 ALTER TABLE `id_kios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT untuk tabel `id_kios_kontrak`
+--
+ALTER TABLE `id_kios_kontrak`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_lain_keluar`

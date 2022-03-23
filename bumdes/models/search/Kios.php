@@ -46,6 +46,7 @@ class Kios extends KiosModel
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=>['defaultOrder'=>['akhir_sewa'=>SORT_ASC]]
         ]);
 
         $this->load($params);

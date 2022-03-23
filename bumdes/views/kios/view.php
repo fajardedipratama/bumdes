@@ -1,4 +1,5 @@
 <?php
+use app\models\KiosKontrak;
 use app\models\SetoranKiosDetail;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
@@ -7,6 +8,8 @@ use dosamigos\datepicker\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Kios */
+
+$kontrak = KiosKontrak::find()->where(['kios_id'=>$model->id])->orderBy(['akhir_kontrak'=>SORT_DESC]);
 
 $this->title = 'Kios #'.$model->no_kios;
 \yii\web\YiiAsset::register($this);
@@ -23,19 +26,8 @@ $this->title = 'Kios #'.$model->no_kios;
         <p>
         <?php if($model->akhir_sewa >= date('Y-m-d')): ?>
             <?= Html::a('<i class="fa fa-fw fa-pencil"></i> Ubah', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('<i class="fa fa-fw fa-calendar"></i> Perpanjang', ['perpanjang', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
             <button class="btn btn-warning" data-toggle="modal" data-target="#nonaktif-kios"><i class="fa fa-fw fa-ban"></i> Nonaktifkan</button>
-        <?php 
-            $check = SetoranKiosDetail::find()->where(['kios_id'=>$model->id])->count();
-            if($check < 1):
-        ?>
-            <?= Html::a('<i class="fa fa-fw fa-trash"></i> Hapus', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'data' => [
-                    'confirm' => 'Are you sure you want to delete this item?',
-                    'method' => 'post',
-                ],
-            ]) ?>
-        <?php endif ?>
         <?php endif; ?>
         </p>  
     </div>
@@ -52,21 +44,49 @@ $this->title = 'Kios #'.$model->no_kios;
             'alamat',
             'jenis_dagang',
             [
-                'attribute'=>'akhir_sewa',
-                'label'=>'Awal-Akhir Sewa',
+                'attribute'=>'awal_sewa',
+                'label'=>'Awal Sewa',
                 'value'=>function($data){
-                    return date('d/m/Y',strtotime($data->awal_sewa)).' - '.date('d/m/Y',strtotime($data->akhir_sewa));
+                    return date('d/m/Y',strtotime($data->awal_sewa));
                 },
             ],
             [
-                'attribute'=>'biaya_sewa',
+                'attribute'=>'akhir_sewa',
+                'label'=>'Akhir Sewa',
                 'value'=>function($data){
-                    return Yii::$app->formatter->asCurrency($data->biaya_sewa);
-                }
+                    return date('d/m/Y',strtotime($data->akhir_sewa));
+                },
             ],
         ],
     ]) ?>
 </div></div></div>
+
+<h4>Riwayat Kontrak</h4>
+<div class="box box-warning"><div class="box-body">
+<table class="table table-hover table-bordered">
+    <tr>
+        <th width="30%">Awal Kontrak</th>
+        <th width="30%">Akhir Kontrak</th>
+        <th width="30%">Biaya Sewa</th>
+        <th width="10%">Aksi</th>
+    </tr>
+<?php foreach($kontrak->all() as $show): ?>
+    <tr>
+        <td><?= date('d/m/Y',strtotime($show->awal_kontrak)) ?></td>
+        <td><?= date('d/m/Y',strtotime($show->akhir_kontrak)) ?></td>
+        <td><?= Yii::$app->formatter->asCurrency($show->tagihan) ?></td>
+        <td>
+        <?php $cek=$kontrak->limit(1)->one(); ?>
+            <?php 
+                if($cek->id === $show->id){
+                    echo Html::a('<i class="fa fa-fw fa-pencil"></i> Ubah', ['kioskontrak/update', 'id' => $show->id],['class'=>'btn btn-xs btn-primary']); 
+                }
+            ?>
+        </td>
+    </tr>
+<?php endforeach ?>
+</table>
+</div></div>
 
     <div class="modal fade" id="nonaktif-kios"><div class="modal-dialog modal-sm">
         <div class="modal-content">

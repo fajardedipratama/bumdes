@@ -45,6 +45,7 @@ $this->title = 'Laporan';
                     return date('d/m/Y',strtotime($data->tgl_awal)).' - '.date('d/m/Y',strtotime($data->tgl_akhir));
                 }
             ],
+            'dana_kemarin',
             [
                 'class' => 'yii\grid\ActionColumn','header'=>'Aksi',
                 'template' => '{print} {update}',

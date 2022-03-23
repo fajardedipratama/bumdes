@@ -51,6 +51,9 @@ use dosamigos\datepicker\DatePicker;
         ]
     ])?>
 </div>
+<div class="col-sm-6">
+    <?= $form->field($model, 'dana_kemarin')->dropDownList(['Ya'=>'Ya','Tidak'=>'Tidak']); ?>
+</div>
 </div>
     <div class="form-group">
         <?= Html::submitButton('Simpan', ['class' => 'btn btn-success']) ?>

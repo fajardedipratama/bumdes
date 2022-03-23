@@ -3,6 +3,7 @@
 namespace app\controllers;
 use Yii;
 use app\models\Kios;
+use app\models\KiosKontrak;
 use app\models\search\Kios as KiosSearch;
 use app\models\search\Kiosnonaktif as KiosnonaktifSearch;
 use yii\web\Controller;
@@ -98,12 +99,22 @@ class KiosController extends Controller
     public function actionCreate()
     {
         $model = new Kios();
+        $model2 = new KiosKontrak();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
                 $model->awal_sewa=Yii::$app->formatter->asDate($model->awal_sewa,'yyyy-MM-dd');
                 $model->akhir_sewa=date('Y-m-d', strtotime('+365 days', strtotime($model->awal_sewa)));;
                 $model->save();
+
+                if($model->save()){
+                    $model2->kios_id = $model->id;
+                    $model2->awal_kontrak = $model->awal_sewa;
+                    $model2->akhir_kontrak = $model->akhir_sewa;
+                    $model2->tagihan = $model->biaya_sewa;
+                    $model2->save();
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -134,6 +145,35 @@ class KiosController extends Controller
         }
 
         return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionPerpanjang($id)
+    {
+        $model = $this->findModel($id);
+        $model2 = new KiosKontrak();
+
+        if ($model->load($this->request->post())) {
+            
+            $model2->kios_id = $model->id;
+            $model2->awal_kontrak = $model->akhir_sewa;
+            $model2->akhir_kontrak = date('Y-m-d',strtotime('+365 days',strtotime($model->akhir_sewa)));
+            $model2->tagihan = $model->biaya_sewa;
+            $model2->save();
+
+            if($model2->save()){
+                Yii::$app->db->createCommand()->update('id_kios',
+                [
+                    'akhir_sewa' => $model2->akhir_kontrak,
+                    'biaya_sewa' => $model->biaya_sewa,
+                ],
+                ['id' => $id])->execute();
+            }
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('perpanjang', [
             'model' => $model,
         ]);
     }
