@@ -54,7 +54,7 @@ class LaporanController extends Controller
             $model->tgl_awal=Yii::$app->formatter->asDate($model->tgl_awal,'yyyy-MM-dd');
             $model->tgl_akhir=Yii::$app->formatter->asDate($model->tgl_akhir,'yyyy-MM-dd');
             $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('index', [

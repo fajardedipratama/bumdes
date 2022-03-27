@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 23 Mar 2022 pada 15.41
+-- Waktu pembuatan: 27 Mar 2022 pada 15.49
 -- Versi server: 10.4.17-MariaDB
 -- Versi PHP: 8.0.2
 
@@ -34,13 +34,6 @@ CREATE TABLE `id_bgmart` (
   `jumlah` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `id_bgmart`
---
-
-INSERT INTO `id_bgmart` (`id`, `tgl_setor`, `nama_setoran`, `jumlah`) VALUES
-(3, '2022-03-15', 'Setoran BGmart Maret', 4000000);
-
 -- --------------------------------------------------------
 
 --
@@ -60,17 +53,6 @@ CREATE TABLE `id_kios` (
   `biaya_sewa` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `id_kios`
---
-
-INSERT INTO `id_kios` (`id`, `no_kios`, `nama`, `no_ktp`, `no_hp`, `alamat`, `jenis_dagang`, `awal_sewa`, `akhir_sewa`, `biaya_sewa`) VALUES
-(1, 4, 'Fajar Dedi Pratama', '31525020205000001', '083173388708', 'Sambiroto Balongpangggang', 'Makanan', '2022-03-04', '2022-02-01', NULL),
-(3, 2, 'Pratama', '123456789000', '0812345678', 'Giri', 'Pakaian', '2022-03-06', '2023-03-06', 5000000),
-(5, 1, 'Aca', '352409910293900', '087888999000', 'Giri', 'Makanan', '2021-07-06', '2022-01-02', 6000000),
-(6, 1, 'Fajar Dedi Pratama', '31525020205000001', '083173388708', 'Sambiroto Balongpangggang', 'Makanan', '2022-03-01', '2023-03-01', 4000000),
-(7, 3, 'Dimas', '3502020202020200', '0812345678', 'Wedani Cerme', 'Pakaian', '2022-03-02', '2024-03-01', 3500000);
-
 -- --------------------------------------------------------
 
 --
@@ -85,14 +67,6 @@ CREATE TABLE `id_kios_kontrak` (
   `tagihan` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `id_kios_kontrak`
---
-
-INSERT INTO `id_kios_kontrak` (`id`, `kios_id`, `awal_kontrak`, `akhir_kontrak`, `tagihan`) VALUES
-(1, 7, '2022-03-02', '2023-03-02', 3000000),
-(2, 7, '2023-03-02', '2024-03-01', 3500000);
-
 -- --------------------------------------------------------
 
 --
@@ -105,13 +79,6 @@ CREATE TABLE `id_lain_keluar` (
   `nama_setoran` varchar(100) NOT NULL,
   `jumlah` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `id_lain_keluar`
---
-
-INSERT INTO `id_lain_keluar` (`id`, `tgl_setor`, `nama_setoran`, `jumlah`) VALUES
-(1, '2022-03-14', 'ongkos kuli', 500000);
 
 -- --------------------------------------------------------
 
@@ -126,13 +93,6 @@ CREATE TABLE `id_lain_masuk` (
   `jumlah` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `id_lain_masuk`
---
-
-INSERT INTO `id_lain_masuk` (`id`, `tgl_setor`, `nama_setoran`, `jumlah`) VALUES
-(1, '2022-03-12', 'sumbangan', 150000);
-
 -- --------------------------------------------------------
 
 --
@@ -142,20 +102,60 @@ INSERT INTO `id_lain_masuk` (`id`, `tgl_setor`, `nama_setoran`, `jumlah`) VALUES
 CREATE TABLE `id_laporan` (
   `id` int(11) NOT NULL,
   `bulan` int(11) NOT NULL,
-  `tahun` varchar(10) NOT NULL,
+  `tahun` int(11) NOT NULL,
   `tgl_awal` date DEFAULT NULL,
   `tgl_akhir` date DEFAULT NULL,
   `dana` int(11) DEFAULT NULL,
-  `dana_kemarin` varchar(100) NOT NULL
+  `dana_kemarin` varchar(100) NOT NULL,
+  `dana_tahun_lalu` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `id_laporan_bagian`
+--
+
+CREATE TABLE `id_laporan_bagian` (
+  `id` int(11) NOT NULL,
+  `tahun_id` int(11) DEFAULT NULL,
+  `keterangan` varchar(100) NOT NULL,
+  `nilai` int(11) DEFAULT NULL,
+  `nominal` int(11) DEFAULT NULL,
+  `jenis` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `id_laporan_tahun`
+--
+
+CREATE TABLE `id_laporan_tahun` (
+  `id` int(11) NOT NULL,
+  `tahun` varchar(5) NOT NULL,
+  `dana` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `id_laporan_user`
+--
+
+CREATE TABLE `id_laporan_user` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `jabatan` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data untuk tabel `id_laporan`
+-- Dumping data untuk tabel `id_laporan_user`
 --
 
-INSERT INTO `id_laporan` (`id`, `bulan`, `tahun`, `tgl_awal`, `tgl_akhir`, `dana`, `dana_kemarin`) VALUES
-(5, 3, '2022', '2022-03-01', '2022-03-31', 6330000, 'Tidak'),
-(6, 4, '2022', '2022-04-01', '2022-04-29', 6830000, 'Ya');
+INSERT INTO `id_laporan_user` (`id`, `nama`, `jabatan`) VALUES
+(1, 'Suis Iswati', 'Direktur'),
+(2, 'Syahida Auliya Rahma', 'Bendahara');
 
 -- --------------------------------------------------------
 
@@ -175,13 +175,6 @@ CREATE TABLE `id_mobil` (
   `status` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `id_mobil`
---
-
-INSERT INTO `id_mobil` (`id`, `merek`, `nama_pemilik`, `nopol`, `no_rangka`, `no_mesin`, `tahun`, `warna`, `status`) VALUES
-(1, 'Daihatsu Xenia', 'Fajar', 'W 3991 JM', 'NJXSAN32893ND', '83DWUQNE3HHJ', 2019, 'Hitam', 'Aktif');
-
 -- --------------------------------------------------------
 
 --
@@ -195,13 +188,6 @@ CREATE TABLE `id_mobil_servis` (
   `keterangan` varchar(100) NOT NULL,
   `biaya` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `id_mobil_servis`
---
-
-INSERT INTO `id_mobil_servis` (`id`, `tgl_servis`, `mobil_id`, `keterangan`, `biaya`) VALUES
-(1, '2022-03-12', 1, 'ganti oli', 120000);
 
 -- --------------------------------------------------------
 
@@ -222,14 +208,6 @@ CREATE TABLE `id_mobil_sewa` (
   `biaya` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `id_mobil_sewa`
---
-
-INSERT INTO `id_mobil_sewa` (`id`, `mobil_id`, `nama`, `no_identitas`, `alamat`, `no_hp`, `keperluan`, `tgl_sewa`, `tgl_selesai`, `biaya`) VALUES
-(2, 1, 'Fajar', '35123456789000', 'Sambiroto Balongpangggang', '083173388708', 'Ke Jawa Tengah', '2022-03-09', '2022-03-13', 800000),
-(3, 1, 'Fajar', '35123456789000', 'Sambiroto Balongpangggang', '083173388708', 'Ke Jawa Tengah', '2022-03-17', '2022-03-18', 500000);
-
 -- --------------------------------------------------------
 
 --
@@ -243,13 +221,6 @@ CREATE TABLE `id_ponten` (
   `jumlah` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data untuk tabel `id_ponten`
---
-
-INSERT INTO `id_ponten` (`id`, `tgl_setor`, `nama_setoran`, `jumlah`) VALUES
-(1, '2022-03-16', 'Setoran ponten pasar', 800000);
-
 -- --------------------------------------------------------
 
 --
@@ -261,15 +232,6 @@ CREATE TABLE `id_setoran_kios` (
   `nama_setoran` varchar(100) NOT NULL,
   `tgl_setoran` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `id_setoran_kios`
---
-
-INSERT INTO `id_setoran_kios` (`id`, `nama_setoran`, `tgl_setoran`) VALUES
-(1, 'Setoran Minggu-1 Bulan Maret 2022', '2022-03-07'),
-(4, 'Setoran Minggu-1 Bulan April 2022', '2022-04-13'),
-(6, 'Setoran Minggu 1 Bulan Maret 2023', '2023-03-18');
 
 -- --------------------------------------------------------
 
@@ -285,16 +247,6 @@ CREATE TABLE `id_setoran_kios_detail` (
   `tagihan` int(11) DEFAULT NULL,
   `biaya` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data untuk tabel `id_setoran_kios_detail`
---
-
-INSERT INTO `id_setoran_kios_detail` (`id`, `setoran_id`, `kios_id`, `tgl_setoran`, `tagihan`, `biaya`) VALUES
-(1, 1, 3, '2022-03-07', 5000000, 200000),
-(5, 4, 3, '2022-04-14', 5000000, 500000),
-(7, 6, 3, '2023-03-18', 6000000, 250000),
-(8, 1, 3, '2022-03-07', 6000000, 500000);
 
 -- --------------------------------------------------------
 
@@ -359,6 +311,24 @@ ALTER TABLE `id_laporan`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `id_laporan_bagian`
+--
+ALTER TABLE `id_laporan_bagian`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `id_laporan_tahun`
+--
+ALTER TABLE `id_laporan_tahun`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeks untuk tabel `id_laporan_user`
+--
+ALTER TABLE `id_laporan_user`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `id_mobil`
 --
 ALTER TABLE `id_mobil`
@@ -409,73 +379,91 @@ ALTER TABLE `id_user`
 -- AUTO_INCREMENT untuk tabel `id_bgmart`
 --
 ALTER TABLE `id_bgmart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_kios`
 --
 ALTER TABLE `id_kios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_kios_kontrak`
 --
 ALTER TABLE `id_kios_kontrak`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_lain_keluar`
 --
 ALTER TABLE `id_lain_keluar`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_lain_masuk`
 --
 ALTER TABLE `id_lain_masuk`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_laporan`
 --
 ALTER TABLE `id_laporan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `id_laporan_bagian`
+--
+ALTER TABLE `id_laporan_bagian`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `id_laporan_tahun`
+--
+ALTER TABLE `id_laporan_tahun`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `id_laporan_user`
+--
+ALTER TABLE `id_laporan_user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_mobil`
 --
 ALTER TABLE `id_mobil`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_mobil_servis`
 --
 ALTER TABLE `id_mobil_servis`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_mobil_sewa`
 --
 ALTER TABLE `id_mobil_sewa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_ponten`
 --
 ALTER TABLE `id_ponten`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_setoran_kios`
 --
 ALTER TABLE `id_setoran_kios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_setoran_kios_detail`
 --
 ALTER TABLE `id_setoran_kios_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `id_user`

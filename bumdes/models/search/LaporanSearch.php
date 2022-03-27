@@ -45,6 +45,7 @@ class LaporanSearch extends Laporan
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=>['defaultOrder'=>['tgl_akhir'=>SORT_DESC]]
         ]);
 
         $this->load($params);

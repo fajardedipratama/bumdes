@@ -23,7 +23,8 @@ $fieldOptions2 = [
         <div class="form">
         <!-- <h2 style="font-family: Helvetica">BJB-APP</h2><br> -->
         <!-- <img src="photos/logo.png" width="50%" style="padding-bottom: 15px"> -->
-        <h1 style="padding-bottom: 15px;font-weight:bold;">LOGIN</h1>
+        <h1 style="font-weight:bold;">LOGIN</h1>
+        <h3 style="padding-bottom: 15px;font-weight:bold;">BUMDES GIRI</h3>
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
         <form class="login-form">
         <?= $form

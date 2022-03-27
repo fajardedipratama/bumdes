@@ -1,6 +1,8 @@
 <?php 
 use yii\helpers\Html;
 use app\models\Laporan;
+use app\models\LaporanUser;
+use app\models\LaporanTahun;
 use app\models\SetoranKios;
 use app\models\SetoranKiosDetail;
 use app\models\MobilSewa;
@@ -37,6 +39,7 @@ function bulan($data){
         return 'Desember';
     }
 }
+
 // pemasukan
 $kios = SetoranKios::find()->where(['between','tgl_setoran',$model->tgl_awal,$model->tgl_akhir])->all();
 $setorkios = SetoranKiosDetail::find()->where(['between','tgl_setoran',$model->tgl_awal,$model->tgl_akhir])->sum('biaya');
@@ -48,14 +51,23 @@ $lainmasuk=LainMasuk::find()->where(['between','tgl_setor',$model->tgl_awal,$mod
 $servis = MobilServis::find()->where(['between','tgl_servis',$model->tgl_awal,$model->tgl_akhir]);
 $lainkeluar=LainKeluar::find()->where(['between','tgl_setor',$model->tgl_awal,$model->tgl_akhir]);
 // total
-if($model->dana_kemarin === 'Ya'){
-    $dana_lalu = Laporan::find()->where(['bulan'=>$model->bulan-1,'tahun'=>$model->tahun])->one();
+$dana_lalu = Laporan::find()->where(['bulan'=>$model->bulan-1,'tahun'=>$model->tahun])->one();
+$tahun_lalu = LaporanTahun::find()->where(['tahun'=>$model->tahun-1])->one();
+if($model->dana_kemarin === 'Ya' && $model->dana_tahun_lalu === 'Ya' ){
+    $pemasukan = $dana_lalu->dana+$tahun_lalu->dana+$setorkios+$mobil->sum('biaya')+$bgmart->sum('jumlah')+$ponten->sum('jumlah')+$lainmasuk->sum('jumlah');
+}elseif($model->dana_kemarin === 'Ya' ){
     $pemasukan = $dana_lalu->dana+$setorkios+$mobil->sum('biaya')+$bgmart->sum('jumlah')+$ponten->sum('jumlah')+$lainmasuk->sum('jumlah');
+}elseif($model->dana_tahun_lalu === 'Ya' ){
+    $pemasukan = $tahun_lalu->dana+$setorkios+$mobil->sum('biaya')+$bgmart->sum('jumlah')+$ponten->sum('jumlah')+$lainmasuk->sum('jumlah');
 }else{
     $pemasukan = $setorkios+$mobil->sum('biaya')+$bgmart->sum('jumlah')+$ponten->sum('jumlah')+$lainmasuk->sum('jumlah');
 }
 $pengeluaran = $servis->sum('biaya')+$lainkeluar->sum('jumlah');
 $selisih = $pemasukan-$pengeluaran;
+
+//pengurus
+$direktur = LaporanUser::find()->where(['id'=>1])->one();
+$bendahara = LaporanUser::find()->where(['id'=>2])->one();
 
 ?>
 <!DOCTYPE html>
@@ -76,7 +88,7 @@ $selisih = $pemasukan-$pengeluaran;
     </style>
 </head>
 <body>
-<?php if($model->dana == NULL): ?>
+<?php if($model->dana == NULL || $model->dana != ($pemasukan-$pengeluaran)): ?>
 <a href="index.php?r=laporan/finishreport&id=<?= $model->id ?>&dana=<?= $selisih ?>"><button style="font-size:18px" class="tombol" onclick="return confirm('Apakah anda yakin laporan ini benar ?')">Laporan Benar</button></a>
 <?php endif ?>
 <button style="font-size:18px" class="tombol" onclick="window.print()">Print Laporan</button>
@@ -90,6 +102,13 @@ $selisih = $pemasukan-$pengeluaran;
         <th>Uang Masuk</th>
         <th>Uang Keluar</th>
     </tr>
+<?php if($model->dana_tahun_lalu === 'Ya'): ?>
+    <tr>
+        <td width="50%">Setoran Tahun Lalu</td>
+        <td width="25%"><?= Yii::$app->formatter->asCurrency($tahun_lalu['dana']);?></td>
+        <td></td>
+    </tr>
+<?php endif ?>
 <?php if($model->dana_kemarin === 'Ya'): ?>
     <tr>
         <td width="50%">Setoran Bulan Sebelumnya</td>
@@ -140,6 +159,21 @@ $selisih = $pemasukan-$pengeluaran;
     <tr>
         <th>Total</th>
         <th colspan="2"><?= Yii::$app->formatter->asCurrency($pemasukan-$pengeluaran) ?></th>
+    </tr>
+</table>
+<br>
+<table border="0" width="100%" style="text-align:center">
+    <tr>
+        <td width="50%"></td>
+        <td width="50%">Giri, <?= date('d ',strtotime($model->tgl_akhir)).bulan(date('m',strtotime($model->tgl_akhir))).date(' Y',strtotime($model->tgl_akhir)) ?></td>
+    </tr>
+    <tr>
+        <td><?= $direktur->jabatan ?> <br><br><br><br><br></td>
+        <td><?= $bendahara->jabatan ?> <br><br><br><br><br></td>
+    </tr>
+    <tr>
+        <td><?= $direktur->nama ?> </td>
+        <td><?= $bendahara->nama ?> </td>
     </tr>
 </table>
 

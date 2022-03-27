@@ -9,7 +9,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\LaporanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Laporan';
+$this->title = 'Laporan Bulanan';
 ?>
 <div class="laporan-index">
 
@@ -46,6 +46,7 @@ $this->title = 'Laporan';
                 }
             ],
             'dana_kemarin',
+            'dana_tahun_lalu',
             [
                 'class' => 'yii\grid\ActionColumn','header'=>'Aksi',
                 'template' => '{print} {update}',
@@ -70,7 +71,7 @@ $this->title = 'Laporan';
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><b>Tambah Setoran</b></h4>          
+                <h4 class="modal-title"><b>Tambah Laporan</b></h4>          
             </div>
             <div class="modal-body">
               <?= $this->render('_form', ['model' => $model]) ?>

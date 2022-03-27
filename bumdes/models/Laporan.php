@@ -9,11 +9,12 @@ use Yii;
  *
  * @property int $id
  * @property int $bulan
- * @property String $tahun
+ * @property int $tahun
  * @property string|null $tgl_awal
  * @property string|null $tgl_akhir
  * @property int $dana
  * @property String $dana_kemarin
+ * @property String $dana_tahun_lalu
  */
 class Laporan extends \yii\db\ActiveRecord
 {
@@ -32,9 +33,8 @@ class Laporan extends \yii\db\ActiveRecord
     {
         return [
             [['bulan', 'tahun','tgl_awal','tgl_akhir'], 'required'],
-            [['bulan','dana'], 'integer'],
-            [['tahun'], 'string', 'max' => 4],
-            [['dana_kemarin'], 'string', 'max' => 100],
+            [['bulan','tahun','dana'], 'integer'],
+            [['dana_kemarin','dana_tahun_lalu'], 'string', 'max' => 100],
             [['tgl_awal','tgl_akhir'],'safe'],
         ];
     }
@@ -50,8 +50,9 @@ class Laporan extends \yii\db\ActiveRecord
             'tahun' => 'Tahun',
             'tgl_awal' => 'Tanggal Awal',
             'tgl_akhir' => 'Tanggal Akhir',
-            'dana' => 'Saldo Bulan Lalu',
-            'dana_kemarin' => 'Tambahkan Dana Bulan Lalu ?',
+            'dana' => 'Saldo',
+            'dana_kemarin' => 'Dana Bulan Lalu ?',
+            'dana_tahun_lalu' => 'Dana Tahun Lalu ?',
         ];
     }
 }

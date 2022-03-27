@@ -48,8 +48,24 @@
                             ['label' => 'Pengeluaran Lainnya', 'icon' => 'dollar', 'url' => ['/lainkeluar'],'active'=>in_array(\Yii::$app->controller->id,['lainkeluar'])],
                         ],
                     ],
-                    ['label' => 'Laporan', 'icon' => 'print', 'url' => ['/laporan'],'active'=>in_array(\Yii::$app->controller->id,['laporan'])],
-                    ['label' => 'Data User', 'icon' => 'user', 'url' => ['/users'], 'active'=>in_array(\Yii::$app->controller->id,['users'])],
+                    [
+                        'label' => 'Laporan',
+                        'icon' => 'book',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Laporan Bulanan', 'icon' => 'book', 'url' => ['/laporan'],'active'=>in_array(\Yii::$app->controller->id,['laporan'])],
+                            ['label' => 'Rekap Tahunan', 'icon' => 'book', 'url' => ['/laporantahun'],'active'=>in_array(\Yii::$app->controller->id,['laporantahun'])],
+                        ],
+                    ],
+                    [
+                        'label' => 'User',
+                        'icon' => 'users',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Pengurus Bumdes', 'icon' => 'user', 'url' => ['/laporanuser'],'active'=>in_array(\Yii::$app->controller->id,['laporanuser'])],
+                            ['label' => 'User Login', 'icon' => 'key', 'url' => ['/users'],'active'=>in_array(\Yii::$app->controller->id,['users'])],
+                        ],
+                    ],
                 ],
             ]
         ) ?>

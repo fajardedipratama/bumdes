@@ -17,7 +17,7 @@ use dosamigos\datepicker\DatePicker;
     <?= $form->field($model, 'bulan')->dropDownList(['1'=>'Januari','2'=>'Februari','3'=>'Maret','4'=>'April','5'=>'Mei','6'=>'Juni','7'=>'Juli','8'=>'Agustus','9'=>'September','10'=>'Oktober','11'=>'November','12'=>'Desember']) ?>
 </div>
 <div class="col-sm-6">
-    <?= $form->field($model, 'tahun')->textInput() ?>
+    <?= $form->field($model, 'tahun')->textInput(['type'=>'number']) ?>
 </div>
 <div class="col-sm-6">
     <?php 
@@ -53,6 +53,9 @@ use dosamigos\datepicker\DatePicker;
 </div>
 <div class="col-sm-6">
     <?= $form->field($model, 'dana_kemarin')->dropDownList(['Ya'=>'Ya','Tidak'=>'Tidak']); ?>
+</div>
+<div class="col-sm-6">
+    <?= $form->field($model, 'dana_tahun_lalu')->dropDownList(['Ya'=>'Ya','Tidak'=>'Tidak']); ?>
 </div>
 </div>
     <div class="form-group">
