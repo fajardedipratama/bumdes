@@ -46,6 +46,7 @@ class PontenSearch extends Ponten
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=>['defaultOrder'=>['tgl_setor'=>SORT_DESC]]
         ]);
 
         $this->load($params);

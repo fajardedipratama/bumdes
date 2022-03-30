@@ -65,16 +65,19 @@ $this->title = 'Kios #'.$model->no_kios;
 <div class="box box-warning"><div class="box-body">
 <table class="table table-hover table-bordered">
     <tr>
-        <th width="30%">Awal Kontrak</th>
-        <th width="30%">Akhir Kontrak</th>
-        <th width="30%">Biaya Sewa</th>
+        <th width="20%">Awal Kontrak</th>
+        <th width="20%">Akhir Kontrak</th>
+        <th width="20%">Biaya Sewa</th>
+        <th width="20%">Terbayar</th>
         <th width="10%">Aksi</th>
     </tr>
 <?php foreach($kontrak->all() as $show): ?>
+<?php $terbayar=SetoranKiosDetail::find()->where(['BETWEEN','tgl_setoran',$show->awal_kontrak,$show->akhir_kontrak])->sum('biaya'); ?>
     <tr>
         <td><?= date('d/m/Y',strtotime($show->awal_kontrak)) ?></td>
         <td><?= date('d/m/Y',strtotime($show->akhir_kontrak)) ?></td>
         <td><?= Yii::$app->formatter->asCurrency($show->tagihan) ?></td>
+        <td><?= Yii::$app->formatter->asCurrency($terbayar) ?></td>
         <td>
         <?php $cek=$kontrak->limit(1)->one(); ?>
             <?php 

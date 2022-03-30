@@ -60,7 +60,7 @@ $bendahara = LaporanUser::find()->where(['id'=>2])->one();
     </style>
 </head>
 <body>
-<?php if($model->dana == NULL): ?>
+<?php if($model->dana == NULL || $model->dana != $selisih): ?>
 <a href="index.php?r=laporantahun/finishreport&id=<?= $model->id ?>&dana=<?= $selisih ?>"><button style="font-size:18px" class="tombol" onclick="return confirm('Apakah anda yakin laporan ini benar ?')">Laporan Benar</button></a>
 <?php endif ?>
 <button style="font-size:18px" class="tombol" onclick="window.print()">Print Laporan</button>

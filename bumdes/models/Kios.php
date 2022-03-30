@@ -57,7 +57,7 @@ class Kios extends \yii\db\ActiveRecord
             'jenis_dagang' => 'Jenis Dagang',
             'awal_sewa' => 'Tanggal Awal Sewa',
             'akhir_sewa' => 'Tanggal Selesai Sewa',
-            'biaya_sewa' => 'Biaya Sewa /tahun',
+            'biaya_sewa' => 'Biaya Sewa',
         ];
     }
 }

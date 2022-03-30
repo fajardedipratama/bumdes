@@ -46,6 +46,7 @@ class MobilservisSearch extends MobilServis
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=>['defaultOrder'=>['tgl_servis'=>SORT_DESC]]
         ]);
 
         $this->load($params);

@@ -46,6 +46,7 @@ class MobilsewaSearch extends MobilSewa
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=>['defaultOrder'=>['tgl_sewa'=>SORT_DESC]]
         ]);
 
         $this->load($params);
