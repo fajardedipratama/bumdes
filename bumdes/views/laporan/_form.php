@@ -52,10 +52,10 @@ use dosamigos\datepicker\DatePicker;
     ])?>
 </div>
 <div class="col-sm-6">
-    <?= $form->field($model, 'dana_kemarin')->dropDownList(['Ya'=>'Ya','Tidak'=>'Tidak']); ?>
+    <?= $form->field($model, 'dana_kemarin')->label('Tambahkan Dana Bulan Lalu ?')->dropDownList(['Ya'=>'Ya','Tidak'=>'Tidak']); ?>
 </div>
 <div class="col-sm-6">
-    <?= $form->field($model, 'dana_tahun_lalu')->dropDownList(['Ya'=>'Ya','Tidak'=>'Tidak']); ?>
+    <?= $form->field($model, 'dana_tahun_lalu')->label('Tambahkan Dana Tahun Lalu ?')->dropDownList(['Tidak'=>'Tidak','Ya'=>'Ya']); ?>
 </div>
 </div>
     <div class="form-group">

@@ -11,6 +11,8 @@ use app\models\Ponten;
 use app\models\LainMasuk;
 use app\models\MobilServis;
 use app\models\LainKeluar;
+use app\models\Insentif;
+use app\models\InsentifDetail;
 
 function bulan($data){
     if($data == 1){
@@ -50,6 +52,7 @@ $lainmasuk=LainMasuk::find()->where(['between','tgl_setor',$model->tgl_awal,$mod
 // pengeluaran
 $servis = MobilServis::find()->where(['between','tgl_servis',$model->tgl_awal,$model->tgl_akhir]);
 $lainkeluar=LainKeluar::find()->where(['between','tgl_setor',$model->tgl_awal,$model->tgl_akhir]);
+$insentifdetail=InsentifDetail::find()->where(['between','tgl_insentif',$model->tgl_awal,$model->tgl_akhir]);
 // total
 $dana_lalu = Laporan::find()->where(['bulan'=>$model->bulan-1,'tahun'=>$model->tahun])->one();
 $tahun_lalu = LaporanTahun::find()->where(['tahun'=>$model->tahun-1])->one();
@@ -62,7 +65,7 @@ if($model->dana_kemarin === 'Ya' && $model->dana_tahun_lalu === 'Ya' ){
 }else{
     $pemasukan = $setorkios+$mobil->sum('biaya')+$bgmart->sum('jumlah')+$ponten->sum('jumlah')+$lainmasuk->sum('jumlah');
 }
-$pengeluaran = $servis->sum('biaya')+$lainkeluar->sum('jumlah');
+$pengeluaran = $servis->sum('biaya')+$lainkeluar->sum('jumlah')+$insentifdetail->sum('nominal');
 $selisih = $pemasukan-$pengeluaran;
 
 //pengurus
@@ -89,9 +92,10 @@ $bendahara = LaporanUser::find()->where(['id'=>2])->one();
 </head>
 <body>
 <?php if($model->dana == NULL || $model->dana != ($pemasukan-$pengeluaran)): ?>
-<a href="index.php?r=laporan/finishreport&id=<?= $model->id ?>&dana=<?= $selisih ?>"><button style="font-size:18px" class="tombol" onclick="return confirm('Apakah anda yakin laporan ini benar ?')">Laporan Benar</button></a>
+    <a href="index.php?r=laporan/finishreport&id=<?= $model->id ?>&dana=<?= $selisih ?>"><button style="font-size:18px" class="tombol" onclick="return confirm('Apakah anda yakin laporan ini benar ?')">Laporan Benar</button></a>
+<?php else: ?>
+    <button style="font-size:18px" class="tombol" onclick="window.print()">Print Laporan</button>
 <?php endif ?>
-<button style="font-size:18px" class="tombol" onclick="window.print()">Print Laporan</button>
 <h3 style="text-align:center">
 	LAPORAN KEUANGAN BUMDES BINTANG GIRI <br>
 	<?= bulan($model->bulan).' '.$model->tahun ?>
@@ -145,6 +149,11 @@ $bendahara = LaporanUser::find()->where(['id'=>2])->one();
         <td width="50%">Perawatan Mobil</td>
         <td></td>
         <td width="25%"><?= Yii::$app->formatter->asCurrency($servis->sum('biaya')) ?></td>
+    </tr>
+    <tr>
+        <td width="50%">Insentif Pengurus</td>
+        <td></td>
+        <td width="25%"><?= Yii::$app->formatter->asCurrency($insentifdetail->sum('nominal')) ?></td>
     </tr>
     <tr>
         <td width="50%">Pengeluaran Lainnya</td>
@@ -307,6 +316,26 @@ $bendahara = LaporanUser::find()->where(['id'=>2])->one();
     <tr>
         <td colspan="3" style="font-weight:bold;text-align: center;">Total</td>
         <td style="font-weight:bold"><?= Yii::$app->formatter->asCurrency($servis->sum('biaya')) ?></td>
+    </tr>
+</table>
+<!-- insentif -->
+<p style="font-weight: bold;">Insentif Pengurus</p>
+<table border="1" cellspacing="0" cellpadding="5" width="100%">
+    <tr>
+        <th width="25%">Tanggal</th>
+        <th width="50%">Nama Pengurus</th>
+        <th width="25%">Nominal</th>
+    </tr>
+<?php foreach($insentifdetail->all() as $show): ?>
+    <tr>
+        <td><?= date('d/m/Y',strtotime($show->tgl_insentif)) ?></td>
+        <td><?= $show->pengurus->nama.' ('.$show->pengurus->jabatan.')' ?></td>
+        <td><?= Yii::$app->formatter->asCurrency($show->nominal); ?></td>
+    </tr>
+<?php endforeach ?>
+    <tr>
+        <td colspan="2" style="font-weight:bold;text-align: center;">Total</td>
+        <td style="font-weight:bold"><?= Yii::$app->formatter->asCurrency($insentifdetail->sum('nominal')) ?></td>
     </tr>
 </table>
 <!-- pengeluaran lain -->

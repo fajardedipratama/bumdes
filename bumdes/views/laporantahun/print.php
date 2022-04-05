@@ -61,9 +61,10 @@ $bendahara = LaporanUser::find()->where(['id'=>2])->one();
 </head>
 <body>
 <?php if($model->dana == NULL || $model->dana != $selisih): ?>
-<a href="index.php?r=laporantahun/finishreport&id=<?= $model->id ?>&dana=<?= $selisih ?>"><button style="font-size:18px" class="tombol" onclick="return confirm('Apakah anda yakin laporan ini benar ?')">Laporan Benar</button></a>
+    <a href="index.php?r=laporantahun/finishreport&id=<?= $model->id ?>&dana=<?= $selisih ?>"><button style="font-size:18px" class="tombol" onclick="return confirm('Apakah anda yakin laporan ini benar ?')">Laporan Benar</button></a>
+<?php else: ?>
+    <button style="font-size:18px" class="tombol" onclick="window.print()">Print Laporan</button>
 <?php endif ?>
-<button style="font-size:18px" class="tombol" onclick="window.print()">Print Laporan</button>
 <h3 style="text-align:center">
     REKAP TAHUNAN BUMDES BINTANG GIRI <br>
     TAHUN <?= $model->tahun ?>

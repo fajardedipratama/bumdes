@@ -1,18 +1,17 @@
 <?php
 
 namespace app\controllers;
-use app\models\Laporan;
-use app\models\LaporanBagian;
-use app\models\search\LaporanbagianSearch;
+
+use app\models\InsentifDetail;
+use app\models\search\InsentifdetailSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
 /**
- * LaporanbagianController implements the CRUD actions for LaporanBagian model.
+ * InsentifdetailController implements the CRUD actions for InsentifDetail model.
  */
-class LaporanbagianController extends Controller
+class InsentifdetailController extends Controller
 {
     /**
      * @inheritDoc
@@ -40,13 +39,13 @@ class LaporanbagianController extends Controller
     }
 
     /**
-     * Lists all LaporanBagian models.
+     * Lists all InsentifDetail models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new LaporanbagianSearch();
+        $searchModel = new InsentifdetailSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -56,7 +55,7 @@ class LaporanbagianController extends Controller
     }
 
     /**
-     * Displays a single LaporanBagian model.
+     * Displays a single InsentifDetail model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -69,13 +68,13 @@ class LaporanbagianController extends Controller
     }
 
     /**
-     * Creates a new LaporanBagian model.
+     * Creates a new InsentifDetail model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new LaporanBagian();
+        $model = new InsentifDetail();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -91,7 +90,7 @@ class LaporanbagianController extends Controller
     }
 
     /**
-     * Updates an existing LaporanBagian model.
+     * Updates an existing InsentifDetail model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -101,32 +100,17 @@ class LaporanbagianController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post())) {
-            $total = Laporan::find()->where(['tahun'=>$model->laptahun->tahun])->orderBy(['bulan'=>SORT_DESC])->limit(1)->one();
-            if($model->jenis === 'Persentase'){
-                $model->nominal = ($total->dana*$model->nilai)/100;
-            }else{
-                $model->nominal = $model->nilai;
-            }
-            $model->save();
-            return $this->redirect(['/laporantahun/view', 'id' => $model->tahun_id]);
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['insentif/view', 'id' => $model->insentif_id]);
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
     }
-    public function actionKalkulasi($id)
-    {
-        $model = $this->findModel($id);
-        $total = Laporan::find()->where(['tahun'=>$model->laptahun->tahun])->orderBy(['bulan'=>SORT_DESC])->limit(1)->one();
-        $model->nominal = ($total->dana*$model->nilai)/100;
-        $model->save();
-        return $this->redirect(['/laporantahun/view', 'id' => $model->tahun_id]);
-    }
 
     /**
-     * Deletes an existing LaporanBagian model.
+     * Deletes an existing InsentifDetail model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -134,21 +118,22 @@ class LaporanbagianController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['insentif/view', 'id' => $model->insentif_id]);
     }
 
     /**
-     * Finds the LaporanBagian model based on its primary key value.
+     * Finds the InsentifDetail model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return LaporanBagian the loaded model
+     * @return InsentifDetail the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = LaporanBagian::findOne(['id' => $id])) !== null) {
+        if (($model = InsentifDetail::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

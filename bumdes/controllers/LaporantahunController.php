@@ -52,8 +52,12 @@ class LaporantahunController extends Controller
         $model = new LaporanTahun();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
-        if ($model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load($this->request->post())) {
+            $cek=Laporan::find()->where(['tahun'=>$model->tahun])->count();
+            if($cek > 0){
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('index', [
@@ -130,8 +134,14 @@ class LaporantahunController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $cek=Laporan::find()->where(['tahun'=>$model->tahun])->count();
+            if($cek > 0){
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [

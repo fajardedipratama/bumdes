@@ -72,7 +72,7 @@ $this->title = 'Kios #'.$model->no_kios;
         <th width="10%">Aksi</th>
     </tr>
 <?php foreach($kontrak->all() as $show): ?>
-<?php $terbayar=SetoranKiosDetail::find()->where(['BETWEEN','tgl_setoran',$show->awal_kontrak,$show->akhir_kontrak])->sum('biaya'); ?>
+<?php $terbayar=SetoranKiosDetail::find()->where(['BETWEEN','tgl_setoran',$show->awal_kontrak,$show->akhir_kontrak])->andWhere(['kios_id'=>$model->id])->sum('biaya'); ?>
     <tr>
         <td><?= date('d/m/Y',strtotime($show->awal_kontrak)) ?></td>
         <td><?= date('d/m/Y',strtotime($show->akhir_kontrak)) ?></td>

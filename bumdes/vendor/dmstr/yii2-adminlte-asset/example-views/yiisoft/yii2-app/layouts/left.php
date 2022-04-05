@@ -39,6 +39,7 @@
                     ],
                     ['label' => 'Setoran Ponten', 'icon' => 'male', 'url' => ['/ponten'],'active'=>in_array(\Yii::$app->controller->id,['ponten'])],
                     ['label' => 'Setoran BGMart', 'icon' => 'cart-plus', 'url' => ['/bgmart'],'active'=>in_array(\Yii::$app->controller->id,['bgmart'])],
+                    ['label' => 'Insentif', 'icon' => 'envelope', 'url' => ['/insentif'],'active'=>in_array(\Yii::$app->controller->id,['insentif'])],
                     [
                         'label' => 'Lain-Lain',
                         'icon' => 'dollar',
@@ -54,7 +55,7 @@
                         'url' => '#',
                         'items' => [
                             ['label' => 'Laporan Bulanan', 'icon' => 'book', 'url' => ['/laporan'],'active'=>in_array(\Yii::$app->controller->id,['laporan'])],
-                            ['label' => 'Rekap Tahunan', 'icon' => 'book', 'url' => ['/laporantahun'],'active'=>in_array(\Yii::$app->controller->id,['laporantahun'])],
+                            ['label' => 'Rekap Tahunan', 'icon' => 'book', 'url' => ['/laporantahun'],'active'=>in_array(\Yii::$app->controller->id,['laporantahun','laporanbagian'])],
                         ],
                     ],
                     [

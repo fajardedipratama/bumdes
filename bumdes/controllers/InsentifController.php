@@ -1,18 +1,18 @@
 <?php
 
 namespace app\controllers;
-use app\models\Laporan;
-use app\models\LaporanBagian;
-use app\models\search\LaporanbagianSearch;
+use Yii;
+use app\models\Insentif;
+use app\models\InsentifDetail;
+use app\models\search\InsentifSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
 /**
- * LaporanbagianController implements the CRUD actions for LaporanBagian model.
+ * InsentifController implements the CRUD actions for Insentif model.
  */
-class LaporanbagianController extends Controller
+class InsentifController extends Controller
 {
     /**
      * @inheritDoc
@@ -40,42 +40,61 @@ class LaporanbagianController extends Controller
     }
 
     /**
-     * Lists all LaporanBagian models.
+     * Lists all Insentif models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new LaporanbagianSearch();
+        $model = new Insentif();
+        $searchModel = new InsentifSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        if ($model->load($this->request->post())) {
+            $model->tgl_insentif=Yii::$app->formatter->asDate($model->tgl_insentif,'yyyy-MM-dd');
+            $model->save();
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
         return $this->render('index', [
+            'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     /**
-     * Displays a single LaporanBagian model.
+     * Displays a single Insentif model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
+        $newmodel = new InsentifDetail();
+        $model = $this->findModel($id);
+
+        if ($newmodel->load($this->request->post())) {
+            $newmodel->insentif_id = $id;
+            $newmodel->tgl_insentif = $model->tgl_insentif;
+            $newmodel->save();
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'newmodel' => $newmodel,
+            'model' => $model,
         ]);
     }
 
     /**
-     * Creates a new LaporanBagian model.
+     * Creates a new Insentif model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new LaporanBagian();
+        $model = new Insentif();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -91,7 +110,7 @@ class LaporanbagianController extends Controller
     }
 
     /**
-     * Updates an existing LaporanBagian model.
+     * Updates an existing Insentif model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -101,32 +120,24 @@ class LaporanbagianController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post())) {
-            $total = Laporan::find()->where(['tahun'=>$model->laptahun->tahun])->orderBy(['bulan'=>SORT_DESC])->limit(1)->one();
-            if($model->jenis === 'Persentase'){
-                $model->nominal = ($total->dana*$model->nilai)/100;
-            }else{
-                $model->nominal = $model->nilai;
-            }
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            $model->tgl_insentif=Yii::$app->formatter->asDate($model->tgl_insentif,'yyyy-MM-dd');
             $model->save();
-            return $this->redirect(['/laporantahun/view', 'id' => $model->tahun_id]);
+            if($model->save()){
+                Yii::$app->db->createCommand()->update('id_insentif_detail',
+                ['tgl_insentif' => $model->tgl_insentif],
+                ['insentif_id' => $model->id])->execute();
+            }
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
     }
-    public function actionKalkulasi($id)
-    {
-        $model = $this->findModel($id);
-        $total = Laporan::find()->where(['tahun'=>$model->laptahun->tahun])->orderBy(['bulan'=>SORT_DESC])->limit(1)->one();
-        $model->nominal = ($total->dana*$model->nilai)/100;
-        $model->save();
-        return $this->redirect(['/laporantahun/view', 'id' => $model->tahun_id]);
-    }
 
     /**
-     * Deletes an existing LaporanBagian model.
+     * Deletes an existing Insentif model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -140,15 +151,15 @@ class LaporanbagianController extends Controller
     }
 
     /**
-     * Finds the LaporanBagian model based on its primary key value.
+     * Finds the Insentif model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return LaporanBagian the loaded model
+     * @return Insentif the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = LaporanBagian::findOne(['id' => $id])) !== null) {
+        if (($model = Insentif::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

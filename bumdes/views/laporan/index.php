@@ -33,7 +33,31 @@ $this->title = 'Laporan Bulanan';
             [
                 'attribute'=>'bulan',
                 'value'=>function($data){
-                    return date('F',mktime(0,0,0,$data->bulan));
+                    if($data->bulan == 1){
+                        return 'Januari';
+                    }elseif($data->bulan == 2){
+                        return 'Februari';
+                    }elseif($data->bulan == 3){
+                        return 'Maret';
+                    }elseif($data->bulan == 4){
+                        return 'April';
+                    }elseif($data->bulan == 5){
+                        return 'Mei';
+                    }elseif($data->bulan == 6){
+                        return 'Juni';
+                    }elseif($data->bulan == 7){
+                        return 'Juli';
+                    }elseif($data->bulan == 8){
+                        return 'Agustus';
+                    }elseif($data->bulan == 9){
+                        return 'September';
+                    }elseif($data->bulan == 10){
+                        return 'Oktober';
+                    }elseif($data->bulan == 11){
+                        return 'November';
+                    }elseif($data->bulan == 12){
+                        return 'Desember';
+                    }
                 },
                 'filter'=> ['1'=>'Januari','2'=>'Februari','3'=>'Maret','4'=>'April','5'=>'Mei','6'=>'Juni','7'=>'Juli','8'=>'Agustus','9'=>'September','10'=>'Oktober','11'=>'November','12'=>'Desember']
             ],

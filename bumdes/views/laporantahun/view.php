@@ -7,9 +7,37 @@ use app\models\Laporan;
 /* @var $this yii\web\View */
 /* @var $model app\models\LaporanTahun */
 
+function bulan($data){
+    if($data == 1){
+        return 'Januari';
+    }elseif($data == 2){
+        return 'Februari';
+    }elseif($data == 3){
+        return 'Maret';
+    }elseif($data == 4){
+        return 'April';
+    }elseif($data == 5){
+        return 'Mei';
+    }elseif($data == 6){
+        return 'Juni';
+    }elseif($data == 7){
+        return 'Juli';
+    }elseif($data == 8){
+        return 'Agustus';
+    }elseif($data == 9){
+        return 'September';
+    }elseif($data == 10){
+        return 'Oktober';
+    }elseif($data == 11){
+        return 'November';
+    }elseif($data == 12){
+        return 'Desember';
+    }
+}
+
 $bagian = LaporanBagian::find()->where(['tahun_id'=>$model->id])->all();
 $bulanan = Laporan::find()->where(['tahun'=>$model->tahun])->all();
-$total = Laporan::find()->where(['tahun'=>$model->tahun])->orderBy(['bulan'=>SORT_DESC])->limit(1)->one(); 
+$total=Laporan::find()->where(['tahun'=>$model->tahun])->orderBy(['bulan'=>SORT_DESC])->limit(1)->one(); 
 
 $this->title = 'Rekap Tahunan '.$model->tahun;
 \yii\web\YiiAsset::register($this);
@@ -68,7 +96,18 @@ $this->title = 'Rekap Tahunan '.$model->tahun;
                     }
                 ?>
                 </td>
-                <td><?= Yii::$app->formatter->asCurrency($show->nominal) ?></td>
+                <td><?php 
+                    if($show->jenis === 'Persentase'){
+                        $cek=($total->dana*$show->nilai)/100;
+                        if($cek != $show->nominal){
+                            echo Html::a('<i class="fa fa-fw fa-refresh"></i> Perbaiki', ['laporanbagian/kalkulasi', 'id' => $show->id],['class'=>'btn btn-xs btn-danger']);
+                        }else{
+                            echo Yii::$app->formatter->asCurrency($show->nominal);
+                        }
+                    }else{
+                        echo Yii::$app->formatter->asCurrency($show->nominal);
+                    }
+                ?></td>
                 <td>
                     <?= Html::a('<i class="fa fa-fw fa-pencil"></i> Ubah', ['laporanbagian/update', 'id' => $show->id],['class'=>'btn btn-xs btn-primary']) ?>
                 </td>
@@ -86,7 +125,7 @@ $this->title = 'Rekap Tahunan '.$model->tahun;
                 </tr>
                 <?php foreach($bulanan as $show): ?>
                 <tr>
-                    <td><?= date('F',mktime(0,0,0,$show->bulan,10)) ?></td>
+                    <td><?= bulan($show->bulan) ?></td>
                     <td><?= Yii::$app->formatter->asCurrency($show->dana) ?></td>
                 </tr>
                 <?php endforeach ?>
